@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerAnim.SetBool("IsAlive", true);
     }
 
     private void FixedUpdate()
