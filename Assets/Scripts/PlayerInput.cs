@@ -22,6 +22,9 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.IsPause || GameManager.Instance.IsGameOver)
+            return;
+
         MoveZ = Input.GetAxis("Vertical");    // »óÇÏ
         MoveX = Input.GetAxis("Horizontal");  // ÁÂ¿ì
         Fire = Input.GetButton("Fire1");

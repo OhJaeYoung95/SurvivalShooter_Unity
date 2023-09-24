@@ -9,7 +9,7 @@ public class LivingObject : MonoBehaviour, IDamageable
     protected float Hp { get; set; }
     public bool Dead { get; private set; }
     public event Action onDeath;
-    public virtual void OnEnable()
+    protected virtual void OnEnable()
     {
         Dead = false;
         Hp = maxHp;
@@ -17,7 +17,8 @@ public class LivingObject : MonoBehaviour, IDamageable
 
     public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
-        Mathf.Clamp(Hp -= damage, 0, maxHp);
+        Hp -= damage;
+        Mathf.Clamp(Hp, 0, maxHp);
 
         if(Hp <= 0 && !Dead)
         {
@@ -29,7 +30,8 @@ public class LivingObject : MonoBehaviour, IDamageable
     {
         if (Dead)
             return;
-        Mathf.Clamp(Hp += addHp, 0, maxHp);
+        Hp += addHp;
+        Mathf.Clamp(Hp, 0, maxHp);
     }
 
     public virtual void Die()

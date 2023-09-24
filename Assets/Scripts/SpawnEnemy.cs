@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SpawnEnemy : MonoBehaviour
 {
-    public Enemy enemyPrefab;
+    public GameObject enemyPrefab;
     public AudioClip hurtClip;
     public AudioClip dieClip;
 
@@ -16,6 +16,8 @@ public class SpawnEnemy : MonoBehaviour
     public int score;
 
     public Enemy.Settings setting;
+
+    private bool isSpawn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +32,25 @@ public class SpawnEnemy : MonoBehaviour
         StartCoroutine(SpawnEnemyCoroutine());
     }
 
+    private void Update()
+    {
+        if (GameManager.Instance.IsPause || GameManager.Instance.IsGameOver)
+        {
+            StopAllCoroutines();
+            isSpawn = false;
+        }
+        else
+        {
+            if(!isSpawn)
+                StartCoroutine(SpawnEnemyCoroutine());
+        }
+
+    }
+
     IEnumerator SpawnEnemyCoroutine()
     {
-        while(true)
+        isSpawn = true;
+        while (true)
         {
             Spawn();
             yield return new WaitForSeconds(spawnDelay);
@@ -41,7 +59,9 @@ public class SpawnEnemy : MonoBehaviour
 
     public void Spawn()
     {
-        Enemy enemy = Instantiate(enemyPrefab, transform.position, transform.rotation);
-        enemy.SetEnemy(setting);
+        GameObject enemy = Instantiate(enemyPrefab, transform.position, transform.rotation);
+        enemy.GetComponent<Enemy>().SetEnemy(setting);
+        //enemy.SetEnemy(setting);
+        enemy.transform.SetParent(transform);
     }
 }

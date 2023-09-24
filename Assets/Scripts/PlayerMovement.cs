@@ -26,12 +26,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.IsPause || GameManager.Instance.IsGameOver)
+            return;
+
         Move();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.IsPause || GameManager.Instance.IsGameOver)
+        {
+            dir = Vector3.zero;
+            MoveAnim();
+            return;
+        }
         Roatate();
         MoveAnim();
     }
@@ -41,7 +50,6 @@ public class PlayerMovement : MonoBehaviour
         dir = new Vector3(PlayerInput.Instance.MoveX, 0f, PlayerInput.Instance.MoveZ);
         if (dir.magnitude > 1f)
             dir.Normalize();
-        Debug.Log(dir.magnitude);
 
         Vector3 movePos = playerRigidbody.position;
         movePos += dir * speed * Time.deltaTime;

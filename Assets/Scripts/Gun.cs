@@ -15,12 +15,11 @@ public class Gun : MonoBehaviour
 
     public Transform firePos;
     public ParticleSystem fireEffect;
-    public LayerMask raycastLayer;
     public AudioClip fireClip;
 
     private AudioSource gunAudio;
     private LineRenderer line;
-    public float damage = 2f;
+    public float damage = 1f;
     public float fireDistance = 20f;
     public float timeBetFire = 0.12f;
     public float lastFireTime;
@@ -59,7 +58,9 @@ public class Gun : MonoBehaviour
     {
         var hitPosition = firePos.position + firePos.forward * fireDistance;
         Ray ray = new Ray(firePos.position, firePos.forward);
-        if(Physics.Raycast(ray, out RaycastHit hitInfo, fireDistance, raycastLayer))
+
+        RaycastHit hitInfo;
+        if(Physics.Raycast(ray, out hitInfo, fireDistance))
         {
             var target = hitInfo.collider.GetComponent<IDamageable>();
             if(target != null)
@@ -69,7 +70,7 @@ public class Gun : MonoBehaviour
 
         StartCoroutine(ShotCoroutine(hitPosition));
 
-        --currentMagAmmo;
+        //--currentMagAmmo;
         if (currentMagAmmo <= 0)
             state = State.Empty;
     }
